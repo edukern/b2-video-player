@@ -4,7 +4,7 @@
  * Plugin URI:  https://github.com/
  * Description: Player de vídeo profissional para vídeos hospedados no Backblaze B2 com entrega via Cloudflare CDN. Usa Plyr.js, suporta legendas VTT e é compatível com Elementor.
  * Version:     1.0.0
- * Author:      Equipe de Treinamento
+ * Author:      Keenfisher
  * Text Domain: b2-video-player
  * License:     GPL-2.0+
  * Requires at least: 6.0
