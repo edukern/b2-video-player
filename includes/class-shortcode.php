@@ -3,7 +3,7 @@ defined( 'ABSPATH' ) || exit;
 
 class B2VP_Shortcode {
 
-    private bool $enqueue_assets = false;
+    private $enqueue_assets = false;
 
     public function __construct() {
         add_shortcode( 'b2video', [ $this, 'render' ] );
@@ -16,7 +16,7 @@ class B2VP_Shortcode {
      * @param array<string, string>|string $atts Atributos do shortcode.
      * @return string HTML do player.
      */
-    public function render( array|string $atts ): string {
+    public function render( $atts ): string {
         if ( is_admin() ) {
             return '';
         }

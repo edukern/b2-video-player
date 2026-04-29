@@ -78,7 +78,7 @@ class B2VP_Admin {
         );
     }
 
-    public function sanitize_checkbox( mixed $value ): string {
+    public function sanitize_checkbox( $value ): string {
         return $value ? '1' : '0';
     }
 
