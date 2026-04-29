@@ -17,7 +17,6 @@ class B2VP_Shortcode {
      * @return string HTML do player.
      */
     public function render( array|string $atts ): string {
-        // Não processar em contexto admin ou REST desnecessariamente.
         if ( is_admin() ) {
             return '';
         }
@@ -30,6 +29,7 @@ class B2VP_Shortcode {
                 'captions' => '',
                 'autoplay' => 'false',
                 'width'    => '',
+                'minimal'  => 'false',
             ],
             (array) $atts,
             'b2video'
@@ -45,12 +45,14 @@ class B2VP_Shortcode {
         $title    = esc_attr( $atts['title'] );
         $poster   = esc_url( $atts['poster'] );
         $captions = esc_url( $atts['captions'] );
-        $autoplay = 'true' === strtolower( $atts['autoplay'] ) ? 'true' : 'false';
+        $autoplay = 'true' === strtolower( $atts['autoplay'] );
+        $minimal  = 'true' === strtolower( $atts['minimal'] );
         $width    = ! empty( $atts['width'] ) ? 'max-width:' . (int) $atts['width'] . 'px;' : '';
 
-        $poster_attr   = $poster   ? ' poster="' . $poster . '"'   : '';
-        $autoplay_attr = 'true' === $autoplay ? ' autoplay playsinline' : '';
-        $style_attr    = $width    ? ' style="' . esc_attr( $width ) . '"' : '';
+        $wrapper_class = 'b2vp-wrapper' . ( $minimal ? ' b2vp-minimal' : '' );
+        $style_attr    = $width  ? ' style="' . esc_attr( $width ) . '"' : '';
+        $poster_attr   = $poster ? ' poster="' . $poster . '"' : '';
+        $autoplay_attr = $autoplay ? ' autoplay playsinline' : '';
 
         $captions_track = '';
         if ( $captions ) {
@@ -60,8 +62,8 @@ class B2VP_Shortcode {
             );
         }
 
-        $html = sprintf(
-            '<div class="b2vp-wrapper"%s>
+        return sprintf(
+            '<div class="%s"%s>
     <video class="b2vp-player"
         playsinline
         controls
@@ -71,6 +73,7 @@ class B2VP_Shortcode {
         %s
     </video>
 </div>',
+            $wrapper_class,
             $style_attr,
             $poster_attr,
             $autoplay_attr,
@@ -78,8 +81,6 @@ class B2VP_Shortcode {
             $url,
             $captions_track
         );
-
-        return $html;
     }
 
     /**
@@ -107,7 +108,6 @@ class B2VP_Shortcode {
             B2VP_VERSION
         );
 
-        // Injetar cor primária como variável CSS inline.
         $primary_color = get_option( 'b2vp_primary_color', '#E63012' );
         $inline_css    = ':root { --plyr-color-main: ' . sanitize_hex_color( $primary_color ) . '; }';
         wp_add_inline_style( 'b2vp-player', $inline_css );
@@ -128,7 +128,6 @@ class B2VP_Shortcode {
             true
         );
 
-        // Passar configurações para o JS.
         $show_speed = get_option( 'b2vp_show_speed', '1' );
         wp_localize_script(
             'b2vp-player',

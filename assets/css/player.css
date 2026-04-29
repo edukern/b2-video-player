@@ -48,6 +48,17 @@
     box-sizing: border-box;
 }
 
+/* Modo minimal: esconde a barra de controles antes do play */
+.b2vp-minimal .plyr:not(.plyr--playing) .plyr__controls {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Suaviza a aparição da barra ao dar play */
+.b2vp-minimal .plyr__controls {
+    transition: opacity 0.3s ease;
+}
+
 /* Responsividade em telas menores */
 @media (max-width: 600px) {
     .b2vp-wrapper .plyr {
