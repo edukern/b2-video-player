@@ -13,6 +13,9 @@
 
 defined( 'ABSPATH' ) || exit;
 
+require_once __DIR__ . '/lib/github-updater.php';
+new SPP_GitHub_Updater( __FILE__, 'edukern/b2-video-player', '1.0.0' );
+
 define( 'B2VP_VERSION', '1.0.0' );
 define( 'B2VP_PATH', plugin_dir_path( __FILE__ ) );
 define( 'B2VP_URL', plugin_dir_url( __FILE__ ) );
