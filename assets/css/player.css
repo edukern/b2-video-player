@@ -1,0 +1,56 @@
+/* B2 Video Player — estilos customizados */
+
+/* A cor principal é injetada via wp_add_inline_style como:
+   :root { --plyr-color-main: #E63012; }
+   Não é necessário redefinir aqui. */
+
+.b2vp-wrapper {
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Aspecto 16:9 responsivo com sombra e borda arredondada */
+.b2vp-wrapper .plyr {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    aspect-ratio: 16 / 9;
+    width: 100%;
+}
+
+/* Garante que o elemento de vídeo preencha o wrapper */
+.b2vp-wrapper .plyr video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Botão de play centralizado */
+.b2vp-wrapper .plyr__control--overlaid {
+    background: var(--plyr-color-main, #E63012);
+}
+
+.b2vp-wrapper .plyr__control--overlaid:hover,
+.b2vp-wrapper .plyr__control--overlaid:focus {
+    background: var(--plyr-color-main, #E63012);
+    opacity: 0.85;
+}
+
+/* Barra de progresso */
+.b2vp-wrapper .plyr--full-ui input[type="range"] {
+    color: var(--plyr-color-main, #E63012);
+}
+
+/* Isolamento: reset de estilos que temas Elementor possam aplicar */
+.b2vp-wrapper *,
+.b2vp-wrapper *::before,
+.b2vp-wrapper *::after {
+    box-sizing: border-box;
+}
+
+/* Responsividade em telas menores */
+@media (max-width: 600px) {
+    .b2vp-wrapper .plyr {
+        border-radius: 4px;
+    }
+}
