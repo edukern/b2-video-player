@@ -1,7 +1,9 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class SPP_GitHub_Updater {
+if ( ! class_exists( 'B2VP_GitHub_Updater' ) ) :
+
+class B2VP_GitHub_Updater {
 
     private $slug, $file, $repo, $version;
 
@@ -18,7 +20,7 @@ class SPP_GitHub_Updater {
     }
 
     private function get_latest_release() {
-        $cached = get_transient( 'spp_github_release' );
+        $cached = get_transient( 'b2vp_github_release' );
         if ( $cached ) return $cached;
 
         $url      = "https://api.github.com/repos/{$this->repo}/releases/latest";
@@ -29,7 +31,7 @@ class SPP_GitHub_Updater {
         $data = json_decode( wp_remote_retrieve_body( $response ) );
         if ( empty( $data->tag_name ) ) return false;
 
-        set_transient( 'spp_github_release', $data, 6 * HOUR_IN_SECONDS );
+        set_transient( 'b2vp_github_release', $data, 6 * HOUR_IN_SECONDS );
         return $data;
     }
 
@@ -79,22 +81,24 @@ class SPP_GitHub_Updater {
 
     public function add_check_link( $links ) {
         $url = wp_nonce_url(
-            add_query_arg( 'spp_force_check', '1', admin_url( 'plugins.php' ) ),
-            'spp_force_check'
+            add_query_arg( 'b2vp_force_check', '1', admin_url( 'plugins.php' ) ),
+            'b2vp_force_check'
         );
         $links[] = '<a href="' . esc_url( $url ) . '">Verificar Atualizações</a>';
         return $links;
     }
 
     public function maybe_force_check() {
-        if ( ! isset( $_GET['spp_force_check'] ) ) return;
-        if ( ! check_admin_referer( 'spp_force_check' ) ) return;
+        if ( ! isset( $_GET['b2vp_force_check'] ) ) return;
+        if ( ! check_admin_referer( 'b2vp_force_check' ) ) return;
         if ( ! current_user_can( 'update_plugins' ) ) return;
 
-        delete_transient( 'spp_github_release' );
+        delete_transient( 'b2vp_github_release' );
         delete_site_transient( 'update_plugins' );
 
         wp_safe_redirect( admin_url( 'plugins.php' ) );
         exit;
     }
 }
+
+endif;
