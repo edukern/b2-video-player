@@ -53,6 +53,25 @@
     box-sizing: border-box;
 }
 
+/* Bunny Stream iframe embed */
+.b2vp-bunny .b2vp-bunny-frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.b2vp-bunny .b2vp-bunny-frame iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
 /* Modo minimal: esconde a barra de controles antes do play */
 .b2vp-minimal .plyr:not(.plyr--playing) .plyr__controls {
     opacity: 0;

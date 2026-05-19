@@ -10,12 +10,6 @@ class B2VP_Shortcode {
         add_action( 'wp_footer', [ $this, 'maybe_enqueue_assets' ] );
     }
 
-    /**
-     * Renderiza o shortcode [b2video].
-     *
-     * @param array<string, string>|string $atts Atributos do shortcode.
-     * @return string HTML do player.
-     */
     public function render( $atts ): string {
         if ( is_admin() ) {
             return '';
@@ -23,18 +17,71 @@ class B2VP_Shortcode {
 
         $atts = shortcode_atts(
             [
-                'url'      => '',
-                'title'    => 'Vídeo',
-                'poster'   => '',
-                'captions' => '',
-                'autoplay' => 'false',
-                'width'    => '',
-                'minimal'  => 'false',
+                'type'      => 'mp4',
+                'url'       => '',
+                'videoid'   => '',
+                'libraryid' => '',
+                'title'     => 'Vídeo',
+                'poster'    => '',
+                'captions'  => '',
+                'autoplay'  => 'false',
+                'width'     => '',
+                'minimal'   => 'false',
             ],
             (array) $atts,
             'b2video'
         );
 
+        $type  = sanitize_key( $atts['type'] );
+        $width = ! empty( $atts['width'] ) ? 'max-width:' . (int) $atts['width'] . 'px;' : '';
+        $style_attr = $width ? ' style="' . esc_attr( $width ) . '"' : '';
+
+        if ( 'bunny' === $type ) {
+            return $this->render_bunny( $atts, $style_attr );
+        }
+
+        return $this->render_mp4( $atts, $style_attr );
+    }
+
+    private function render_bunny( $atts, $style_attr ): string {
+        $video_id   = sanitize_text_field( $atts['videoid'] );
+        $library_id = sanitize_text_field( $atts['libraryid'] );
+
+        if ( empty( $video_id ) || empty( $library_id ) ) {
+            return '<!-- b2video: parâmetros "videoid" e "libraryid" são obrigatórios para type="bunny" -->';
+        }
+
+        $autoplay = 'true' === strtolower( $atts['autoplay'] ) ? 'true' : 'false';
+        $title    = esc_attr( $atts['title'] );
+
+        $embed_url = sprintf(
+            'https://iframe.mediadelivery.net/embed/%s/%s?autoplay=%s&loop=false&muted=false&preload=true&responsive=true',
+            $library_id,
+            $video_id,
+            $autoplay
+        );
+
+        $this->enqueue_assets = true;
+
+        return sprintf(
+            '<div class="b2vp-wrapper b2vp-bunny"%s>
+    <div class="b2vp-bunny-frame">
+        <iframe
+            src="%s"
+            loading="lazy"
+            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+            allowfullscreen="true"
+            title="%s">
+        </iframe>
+    </div>
+</div>',
+            $style_attr,
+            esc_url( $embed_url ),
+            $title
+        );
+    }
+
+    private function render_mp4( $atts, $style_attr ): string {
         $url = esc_url( trim( $atts['url'] ) );
         if ( empty( $url ) ) {
             return '<!-- b2video: parâmetro "url" é obrigatório -->';
@@ -47,10 +94,8 @@ class B2VP_Shortcode {
         $captions = esc_url( $atts['captions'] );
         $autoplay = 'true' === strtolower( $atts['autoplay'] );
         $minimal  = 'true' === strtolower( $atts['minimal'] );
-        $width    = ! empty( $atts['width'] ) ? 'max-width:' . (int) $atts['width'] . 'px;' : '';
 
         $wrapper_class = 'b2vp-wrapper' . ( $minimal ? ' b2vp-minimal' : '' );
-        $style_attr    = $width  ? ' style="' . esc_attr( $width ) . '"' : '';
         $poster_attr   = $poster ? ' poster="' . $poster . '"' : '';
         $autoplay_attr = $autoplay ? ' autoplay playsinline' : '';
 
@@ -83,9 +128,6 @@ class B2VP_Shortcode {
         );
     }
 
-    /**
-     * Enfileira os assets do Plyr e do plugin apenas se o shortcode foi usado na página.
-     */
     public function maybe_enqueue_assets(): void {
         if ( ! $this->enqueue_assets ) {
             return;
