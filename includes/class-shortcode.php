@@ -55,7 +55,7 @@ class B2VP_Shortcode {
         $title    = esc_attr( $atts['title'] );
 
         $embed_url = sprintf(
-            'https://iframe.mediadelivery.net/embed/%s/%s?autoplay=%s&loop=false&muted=false&preload=true&responsive=true',
+            'https://iframe.mediadelivery.net/embed/%s/%s?autoplay=%s&loop=false&muted=false&preload=false&responsive=true',
             $library_id,
             $video_id,
             $autoplay
@@ -68,9 +68,10 @@ class B2VP_Shortcode {
     <div class="b2vp-bunny-frame">
         <iframe
             src="%s"
-            loading="lazy"
-            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+            allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;fullscreen;"
             allowfullscreen="true"
+            mozallowfullscreen="true"
+            webkit-allowfullscreen="true"
             title="%s">
         </iframe>
     </div>
