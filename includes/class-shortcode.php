@@ -55,7 +55,7 @@ class B2VP_Shortcode {
         $title    = esc_attr( $atts['title'] );
 
         $embed_url = sprintf(
-            'https://iframe.mediadelivery.net/embed/%s/%s?autoplay=%s&loop=false&muted=false&preload=false&responsive=true',
+            'https://iframe.mediadelivery.net/embed/%s/%s?autoplay=%s&loop=false&muted=false&preload=false',
             $library_id,
             $video_id,
             $autoplay
