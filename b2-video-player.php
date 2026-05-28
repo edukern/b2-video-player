@@ -2,7 +2,7 @@
 /**
  * Plugin Name: B2 Video Player
  * Plugin URI:  https://github.com/
- * Description: Player de vídeo profissional para vídeos hospedados no Backblaze B2 com entrega via Cloudflare CDN. Usa Plyr.js, suporta legendas VTT e é compatível com Elementor.
+ * Description: Player de vídeo profissional para WordPress. Suporta embeds de serviços de hospedagem de vídeo e arquivos MP4, com legendas VTT, autoplay e compatibilidade com Elementor.
  * Version:     1.0.5
  * Author:      Keenfisher
  * Text Domain: b2-video-player
