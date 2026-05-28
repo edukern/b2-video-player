@@ -86,4 +86,24 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.b2vp-player').forEach((videoEl) => {
         new Plyr(videoEl, plyrOptions);
     });
+
+    // Força altura 16:9 em pixel nos containers de Bunny — evita que CSS padding-bottom
+    // seja ignorado pelo Elementor no mobile e cause sobreposição de conteúdo.
+    function fixBunnyFrames() {
+        document.querySelectorAll('.b2vp-bunny-frame').forEach((frame) => {
+            const w = frame.offsetWidth;
+            if (w > 0) {
+                frame.style.height = Math.round(w * 9 / 16) + 'px';
+                frame.style.paddingBottom = '0';
+            }
+        });
+    }
+
+    fixBunnyFrames();
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(fixBunnyFrames, 120);
+    });
 });
